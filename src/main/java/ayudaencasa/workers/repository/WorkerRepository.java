@@ -4,6 +4,8 @@ package ayudaencasa.workers.repository;
 import ayudaencasa.workers.entity.Worker;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
+import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedScanList;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
 
@@ -25,6 +27,10 @@ public class WorkerRepository {
 
     public  Worker findWorkerById(String uId){
         return mapper.load(Worker.class,uId);
+    }
+
+    public PaginatedScanList<Worker> findAllWorkers() {
+        return mapper.scan(Worker.class, new DynamoDBScanExpression());
     }
 
     public  String deleteWorker (Worker worker){

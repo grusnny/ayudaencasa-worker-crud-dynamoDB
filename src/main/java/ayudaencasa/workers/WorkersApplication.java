@@ -2,6 +2,7 @@ package ayudaencasa.workers;
 
 import ayudaencasa.workers.entity.Worker;
 import ayudaencasa.workers.repository.WorkerRepository;
+import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedScanList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,31 +10,31 @@ import org.springframework.web.bind.annotation.*;
 
 @SpringBootApplication
 @RestController
+@RequestMapping(value = "/worker")
 public class WorkersApplication {
 
 	@Autowired
 	private WorkerRepository repository;
 
-	@GetMapping("/getworker/{uId}")
+	@GetMapping("/{uId}")
 	public Worker GetWorker(@PathVariable String uId){
 		return repository.findWorkerById(uId);
 	}
-	@PostMapping("/saveworker")
+	@PostMapping
 	public Worker PostWorker(@RequestBody Worker worker){
 		return repository.addWorker(worker);
 	}
-	@PutMapping("/editworker")
+	@PutMapping
 	public String UpdateWorker(@RequestBody Worker worker){
 		return repository.editWorker(worker);
 	}
-	@DeleteMapping("/deleteworker")
+	@DeleteMapping
 	public String DeleteWorker(@RequestBody Worker worker){
 		return repository.deleteWorker(worker);
 	}
 	@GetMapping
-	public Worker[] GetAllWorker(String uId){
-		Worker workers[] = new Worker[0];
-		return workers;
+	public PaginatedScanList<Worker> GetAllUsers(){
+		return repository.findAllWorkers();
 	}
 
 	public static void main(String[] args) {
